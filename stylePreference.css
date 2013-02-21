@@ -1,0 +1,64 @@
+body
+{
+	margin:0;
+	padding:10px;
+	background-color:#f1f1f1;
+	font-family:"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial;
+	width:300px;
+	font-size:12px;
+	text-align:center;
+}
+
+#content
+{
+	width:100%;
+	height:100%;
+}
+
+p
+{
+	text-align:left;
+}
+
+.box-white
+{
+	background:#fff;
+	border:1px solid #B4B7BB;
+	border-radius:10px;
+}
+
+.box-white p
+{
+	color:#000;
+	border-bottom:1px solid #B4B7BB;
+	margin:0;
+	padding:10px;
+	text-align:left;
+}
+
+.box-white p:last-child
+{
+	border-bottom:none;
+}
+
+.box-white p span
+{
+	color:#4C556C;
+	float:right;
+}
+
+.box-white p span.detail
+{
+	color: #999;
+	float: none;
+	font-size:12px;
+	margin-left:5px;
+}
+
+.box-white p span.arrow
+{
+	color: #666;
+	float: none;
+	margin-left: 5px;
+	text-shadow: 0 1px 1px #666;
+}

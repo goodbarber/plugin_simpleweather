@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>GoodBarber Demo Plugin</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+	<link rel="stylesheet" type="text/css" href="./style.css" />
+	<script language="JavaScript" src="./GBJSTK.js"></script>
+	<script language="JavaScript" src="./data.js"></script>
+	<script language="JavaScript" src="./plugin.js"></script>
+</head>
+<body>
+	<div id="settings" onclick="javascript:gbNavigateModal('preference');"></div>
+	<div id="content">
+		<div id="today">Today in</div>
+		<div id="city"></div>
+		<div id="temp"></div>
+		<div id="icon"><center><img id="iconImg" style="display:none;" /></center></div>
+		<div id="weather"></div>
+		<div id="refresh">
+			<center>
+				<div id="refreshButton" onClick="javascript:refresh();"></div>
+				<div id="loadingSpinner" style="display:none;"></div>
+			</center>
+		</div>
+	</div>
+</body>
+</html>

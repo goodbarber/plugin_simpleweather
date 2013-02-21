@@ -1,0 +1,4 @@
+/* Var : dict listOfCities
+*  The list of cities to be shown in the modal Preferences menu
+*/
+var listOfCities = { "Local" : { "displayName" : "My Location" }, "SF" : { "displayName" : "San Francisco, CA", "lat" : "37.770443", "long" : "-122.415504" }, "NY" : { "displayName" : "New York, NY", "lat" : "40.728527", "long" : "-73.987427" }, "Paris" : { "displayName" : "Paris, France", "lat" : "48.860875", "long" : "2.339745" }, "Roma" : { "displayName" : "Roma, Italia", "lat" : "41.900233", "long" : "12.475662" }, "Tokyo" : { "displayName" : "Tokyo, Japan", "lat" : "35.689649", "long" : "139.701462" }, "Rio" : { "displayName" : "Rio de Janeiro, Brazil", "lat" : "-22.920453", "long" : "-43.211975" }, "Novossibirsk" : { "displayName" : "Novossibirsk, Russia", "lat" : "55.304138", "long" : "83.144531" } };

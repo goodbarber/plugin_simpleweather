@@ -1,0 +1,110 @@
+body
+{
+	margin:0;
+	padding:10px;
+	background-color:#CCC;
+	font-family:"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial;
+	width:300px;
+	font-size:12px;
+	text-align:center;
+}
+
+#content
+{
+	width:100%;
+	height:100%;
+}
+
+#temp
+{
+	color:white;
+	font-size:10em;
+	font-weight: 550;
+}
+
+#today
+{
+	color:white;
+	font-size:2.3em;
+	font-weight: 250;
+}
+
+#city
+{
+	color:white;
+	font-size:2.7em;
+	font-weight: 320;
+}
+
+#weather
+{
+	color:white;
+	font-size:2.3em;
+	font-weight: 250;
+}
+
+#iconImg
+{
+	width:98px;
+	height:98px;
+}
+
+#refresh
+{
+	margin-top:30px;
+}
+
+#refreshButton
+{
+	background:url('./refresh.png') no-repeat;
+	-webkit-background-size:49px 39px;
+	-moz-background-size:49px 39px;
+	background-size:49px 39px;
+	width:49px;
+	height:39px;
+}
+
+#loadingSpinner
+{
+	background:url('./loading.gif') no-repeat;
+	-webkit-background-size:50px 50px;
+	-moz-background-size:50px 50px;
+	background-size:50px 50px;
+	width:50px;
+	height:50px;
+}
+
+#settings
+{
+	background:url('./settings.png') no-repeat;
+	-webkit-background-size:39px 47px;
+	-moz-background-size:39px 47px;
+	background-size:39px 47px;
+	width:39px;
+	height:47px;
+	position:absolute;
+	top:50%;
+	right:0px;
+	z-index:1;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+		only screen and (min--moz-device-pixel-ratio: 2),
+		only screen and (-o-min-device-pixel-ratio: 2/1),
+		only screen and (min-device-pixel-ratio: 2)
+{
+	#refreshButton
+	{
+		background:url('./refresh@2x.png') no-repeat;
+	}
+
+	#loadingSpinner
+	{
+		background:url('./loading@2x.gif') no-repeat;
+	}
+
+	#settings
+	{
+		background:url('./settings@2x.png') no-repeat;
+	}
+}
