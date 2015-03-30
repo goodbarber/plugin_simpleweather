@@ -17,7 +17,16 @@ var pluginDidDisappear = false;
 function gbRequestDidSuccess ( tag, data, src )
 {
 	toggleRefresh ();
-	fillPageWithData ( JSON.parse ( decodeURIComponent ( data ) ) );
+	fillPageWithData ( JSON.parse ( data ) );
+}
+
+/* Callback : gbRequestDidSuccessWithCache
+*  Called when the Weather API HTTP request is a success and cached.
+*/
+function gbRequestDidSuccessWithCache ( tag, data, src )
+{
+	toggleRefresh ();
+	fillPageWithData ( JSON.parse ( data ) );
 }
 
 /* Callback : gbRequestDidFail
@@ -96,7 +105,7 @@ function gbDidFailGetLocation ( errorMessage )
 /************* Custom methods *************/
 
 /* Function : toggleRefresh
-*  Toggle visbility of the refresh button and the loading spinner. 
+*  Toggle visbility of the refresh button and the loading spinner.
 */
 function toggleRefresh ()
 {
@@ -112,7 +121,7 @@ function toggleRefresh ()
 }
 
 /* Function : refresh
-*  A method that refresh the user's geolocation, and calls the weather API. 
+*  A method that refresh the user's geolocation, and calls the weather API.
 */
 function refresh ( from )
 {
@@ -164,6 +173,6 @@ function setBodyBackgroundColorWithTemp ( temp )
 		color = "#d44220";
 	else
 		color = "#cccccc";
-		
+
 	document.body.style.backgroundColor = color;
 }

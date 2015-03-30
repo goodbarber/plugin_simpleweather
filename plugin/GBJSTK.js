@@ -8,7 +8,7 @@
 /************* Debugging Zone *************/
 
 /* Var : int gbDebuggingMode
-*  Sets the debugging mode using a system of code values. 
+*  Sets the debugging mode using a system of code values.
 *  0 : Production mode
 *  1 : Alerts before any request
 *  2 : Alerts before any request + stop requests
@@ -17,18 +17,33 @@ var gbDebuggingMode = 0;
 
 /* Var : BOOL gbDesktopMode
 *  Switch the gbRequest method to gbXHRequest - just to develop on a desktop browser.
-*  DO NOT USE IN PRODUCTION 
+*  DO NOT USE IN PRODUCTION
 *  true : Development mode
 *  false : Production mode
 */
-var gbDesktopMode = false;
+var gbDesktopMode = !navigator.userAgent.match(/iPhone OS/i) && !navigator.userAgent.match(/Android/i);
+
+/* Var : string gbToken
+*  Initialize the authentification token used in gbRequest();
+*/
+var gbToken = gbParam('gbToken');
 
 /************* Helper Functions *************/
+/* Function : gbParam
+*  This function returns the value of an argument in location.href.
+*  @param name The name of the argument
+*  @return value
+*/
+function gbParam(name) {
+    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results) return results[1];
+    return '';
+}
 
 /* Function : gbIsEmpty
 *  This function tests if an object is empty.
 *  @param obj The action of the form
-*  @return true if the object is empty, false otherwise 
+*  @return true if the object is empty, false otherwise
 */
 function gbIsEmpty ( obj )
 {
@@ -68,13 +83,13 @@ function gbConstructQueryString ( params )
 /* Function : gbPostRequest
 *  This function creates a form in document.body and send a POST request to "path" using "getParams" and "postParams".
 *  @param path The action of the form
-*  @param params The params to send in the request body 
+*  @param params The params to send in the request body
 */
 function gbPostRequest ( path, getParams, postParams )
 {
 	var formAction = path;
 	if ( !gbIsEmpty ( getParams ) )
-		formAction += "?" + gbConstructQueryString ( getParams ); 
+		formAction += "?" + gbConstructQueryString ( getParams );
 
 	var form = document.createElement ( "form" );
 	form.setAttribute ( "method", "post" );
@@ -91,13 +106,21 @@ function gbPostRequest ( path, getParams, postParams )
 		}
 	}
 	document.body.appendChild ( form );
-	form.submit ();
+
+	if (gbUserInfo.platform=='android')
+	{
+		Android.post (formAction, postParams);
+	}
+	else
+	{
+		form.submit ();
+	}
 }
 
 /* Function : gbGetRequest
 *  This function launches a navigation to "path" setting "params" as GET arguments.
 *  @param path The destination path
-*  @param params (optional) The params to send in the request body 
+*  @param params (optional) The params to send in the request body
 */
 function gbGetRequest ( path, getParams )
 {
@@ -108,7 +131,7 @@ function gbGetRequest ( path, getParams )
 
 	if ( gbDebuggingMode >= 1 )
 		alert ( destination );
-	
+
 	if ( gbDebuggingMode < 2 )
 		document.location.replace ( destination );
 }
@@ -134,7 +157,7 @@ function gbXHRequest ( requestMethod, tag, path, postParams )
 *  Launches the mail Composer.
 *  @param to The destination address
 *  @param subject (optional) The mail subject
-*  @param body The (optional) mail content 
+*  @param body The (optional) mail content
 */
 function gbMailto ( to, subject, body )
 {
@@ -146,7 +169,7 @@ function gbMailto ( to, subject, body )
 
 /* Function : gbTel
 *  Launches a call.
-*  @param phoneNumber The number to call 
+*  @param phoneNumber The number to call
 */
 function gbTel ( phoneNumber )
 {
@@ -155,7 +178,7 @@ function gbTel ( phoneNumber )
 
 /* Function : gbSms
 *  Launches the SMS composer.
-*  @param phoneNumber The number to text 
+*  @param phoneNumber The number to text
 */
 function gbSms ( phoneNumber )
 {
@@ -164,7 +187,7 @@ function gbSms ( phoneNumber )
 
 /* Function : gbMaps
 *  Launches the Maps native application.
-*  @param params The parameters to pass in the query string 
+*  @param params The parameters to pass in the query string
 */
 function gbMaps ( params )
 {
@@ -238,11 +261,18 @@ function gbNavigateBack ()
 */
 function gbRequest ( resourceUrl, tag, cache, requestMethod, postParams )
 {
+	if (gbDesktopMode && gbToken == '')
+	{
+		setTimeout(function() { gbRequest ( resourceUrl, tag, cache, requestMethod, postParams ) }, 200);
+		return;
+	}
+
 	postParams = postParams || {};
 	requestMethod = requestMethod || "GET";
 
 	if ( gbDesktopMode )
 	{
+		resourceUrl+= (resourceUrl.match(/\?/g) ? '&' : '?') +'gbToken=' + gbToken;
 		gbXHRequest ( requestMethod, tag, resourceUrl, postParams );
 	}
 	else
@@ -262,7 +292,7 @@ function gbRequest ( resourceUrl, tag, cache, requestMethod, postParams )
 
 /* Function : gbAuthenticate
 *  Ask the user to authenticate on a social network.
-*  @param services The services to use for the authentication | values : [all(default)|facebook|twitter]
+*  @param services The services to use for the authentication | values : [all(default)|facebook|twitter]
 *  @param skip Give the user the possibility to skip the authentication process | values : [YES(default)|NO]
 */
 function gbAuthenticate ( services, skip )
@@ -303,14 +333,14 @@ function gbGetLocation ()
 {
 	if ( gbDesktopMode )
 	{
-		navigator.geolocation.getCurrentPosition ( 
+		navigator.geolocation.getCurrentPosition (
 			function (position)
-			{  
+			{
 				gbDidSuccessGetLocation ( position.coords.latitude,position.coords.longitude );
  			},
 			function (error)
 			{
-					switch(error.code) 
+					switch(error.code)
 					{
 						case error.TIMEOUT:
 							gbDidFailGetLocation ('Timeout');
@@ -332,6 +362,14 @@ function gbGetLocation ()
 	{
 		gbGetRequest ( "goodbarber://getlocation" );
 	}
+}
+
+/* Function : gbGetTimezoneOffset
+* Asks for the time difference between UTC time and local time, in minutes.
+*/
+function gbGetTimezoneOffset ()
+{
+	gbGetRequest ( "goodbarber://gettimezoneoffset" );
 }
 
 /* Function : gbSetPreference
