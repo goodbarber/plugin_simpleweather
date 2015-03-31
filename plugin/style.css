@@ -57,9 +57,9 @@ body
 #refreshButton
 {
 	background:url('./refresh.png') no-repeat;
-	-webkit-background-size:49px 39px;
-	-moz-background-size:49px 39px;
-	background-size:49px 39px;
+	-webkit-background-size:100%;
+	-moz-background-size:100%;
+	background-size:100%;
 	width:49px;
 	height:39px;
 }
@@ -67,9 +67,9 @@ body
 #loadingSpinner
 {
 	background:url('./loading.gif') no-repeat;
-	-webkit-background-size:50px 50px;
-	-moz-background-size:50px 50px;
-	background-size:50px 50px;
+	-webkit-background-size:100%;
+	-moz-background-size:100%;
+	background-size:100%;
 	width:50px;
 	height:50px;
 }
@@ -77,9 +77,9 @@ body
 #settings
 {
 	background:url('./settings.png') no-repeat;
-	-webkit-background-size:39px 47px;
-	-moz-background-size:39px 47px;
-	background-size:39px 47px;
+	-webkit-background-size:100%;
+	-moz-background-size:100%;
+	background-size:100%;
 	width:39px;
 	height:47px;
 	position:absolute;
@@ -96,15 +96,24 @@ body
 	#refreshButton
 	{
 		background:url('./refresh@2x.png') no-repeat;
+		-webkit-background-size:100%;
+		-moz-background-size:100%;
+		background-size:100%;
 	}
 
 	#loadingSpinner
 	{
 		background:url('./loading@2x.gif') no-repeat;
+		-webkit-background-size:100%;
+		-moz-background-size:100%;
+		background-size:100%;
 	}
 
 	#settings
 	{
 		background:url('./settings@2x.png') no-repeat;
+		-webkit-background-size:100%;
+		-moz-background-size:100%;
+		background-size:100%;
 	}
 }
