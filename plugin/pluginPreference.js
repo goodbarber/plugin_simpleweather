@@ -2,6 +2,7 @@
 
 var currentLocation;
 var retina = window.devicePixelRatio >= 2;
+var retina3 = window.devicePixelRatio >= 3;
 
 /************* GB Plugin API Callback Methods Implementation *************/
 
@@ -25,7 +26,7 @@ function gbDidSuccessGetPreference ( key, valueString )
 	{
 		currentLocation = "Local";
 	}
-	
+
 	setCorrectCheckmarks ();
 }
 
@@ -40,7 +41,9 @@ function initializeCities ()
 	for ( var city in listOfCities )
 	{
 		var checkmarkImg = "checkmark.png";
-		if ( retina )
+		if ( retina3 )
+			checkmarkImg = "checkmark@3x.png";
+		else if ( retina )
 			checkmarkImg = "checkmark@2x.png";
 		document.getElementById("cities").innerHTML += "<p onclick=\"javascript:setCurrentLocation('" + city + "');\">" + listOfCities[city]["displayName"] + " <span><img id=\"checkmark" + city + "\" src=\"./" + checkmarkImg + "\" style=\"width:12px;height:13px;display:none;\" /></span></p>";
 	}
@@ -50,7 +53,7 @@ function initializeCities ()
 }
 
 /* Function : setCorrectCheckmarks
-*  Toggle visbility of the checkmarks regarding the current location. 
+*  Toggle visbility of the checkmarks regarding the current location.
 */
 function setCorrectCheckmarks ()
 {
@@ -60,7 +63,7 @@ function setCorrectCheckmarks ()
 }
 
 /* Function : hideAllCheckmarks
-*  A method that hides all checkmarks. 
+*  A method that hides all checkmarks.
 */
 function hideAllCheckmarks ()
 {
@@ -72,7 +75,7 @@ function hideAllCheckmarks ()
 }
 
 /* Function : setCurrentLocation
-*  Set the current location 
+*  Set the current location
 */
 function setCurrentLocation ( city )
 {

@@ -4,7 +4,7 @@ body
 	padding:10px;
 	background-color:#CCC;
 	font-family:"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial;
-	width:300px;
+	width:auto;
 	font-size:12px;
 	text-align:center;
 }
@@ -57,29 +57,29 @@ body
 #refreshButton
 {
 	background:url('./refresh.png') no-repeat;
-	-webkit-background-size:100%;
-	-moz-background-size:100%;
-	background-size:100%;
+	-webkit-background-size:49px 39px;
+	-moz-background-size:49px 39px;
+	background-size:49px 39px;
 	width:49px;
 	height:39px;
 }
 
 #loadingSpinner
 {
-	background:url('./loading.gif') no-repeat;
-	-webkit-background-size:100%;
-	-moz-background-size:100%;
-	background-size:100%;
-	width:50px;
-	height:50px;
+	background:url('./loading.svg') no-repeat;
+		-webkit-background-size:45px 45px;
+		-moz-background-size:45px 45px;
+		background-size:45px 45px;
+	width:45px;
+	height:45px;
 }
 
 #settings
 {
 	background:url('./settings.png') no-repeat;
-	-webkit-background-size:100%;
-	-moz-background-size:100%;
-	background-size:100%;
+	-webkit-background-size:39px 47px;
+	-moz-background-size:39px 47px;
+	background-size:39px 47px;
 	width:39px;
 	height:47px;
 	position:absolute;
@@ -88,32 +88,46 @@ body
 	z-index:1;
 }
 
-@media only screen and (-webkit-min-device-pixel-ratio: 2),
-		only screen and (min--moz-device-pixel-ratio: 2),
-		only screen and (-o-min-device-pixel-ratio: 2/1),
-		only screen and (min-device-pixel-ratio: 2)
+@media only screen and (-webkit-min-device-pixel-ratio: 3),
+		only screen and (min--moz-device-pixel-ratio: 3),
+		only screen and (-o-min-device-pixel-ratio: 3),
+		only screen and (min-device-pixel-ratio: 3)
+{
+	#refreshButton
+	{
+		background:url('./refresh@3x.png') no-repeat;
+		-webkit-background-size:49px 39px;
+		-moz-background-size:49px 39px;
+		background-size:49px 39px;
+	}
+
+	#settings
+	{
+		background:url('./settings@3x.png') no-repeat;
+		-webkit-background-size:39px 47px;
+		-moz-background-size:39px 47px;
+		background-size:39px 47px;
+	}
+}
+
+@media only screen and (-webkit-device-pixel-ratio: 2),
+		only screen and (-moz-device-pixel-ratio: 2),
+		only screen and (-o-device-pixel-ratio: 2/1),
+		only screen and (device-pixel-ratio: 2)
 {
 	#refreshButton
 	{
 		background:url('./refresh@2x.png') no-repeat;
-		-webkit-background-size:100%;
-		-moz-background-size:100%;
-		background-size:100%;
-	}
-
-	#loadingSpinner
-	{
-		background:url('./loading@2x.gif') no-repeat;
-		-webkit-background-size:100%;
-		-moz-background-size:100%;
-		background-size:100%;
+		-webkit-background-size:49px 39px;
+		-moz-background-size:49px 39px;
+		background-size:49px 39px;
 	}
 
 	#settings
 	{
 		background:url('./settings@2x.png') no-repeat;
-		-webkit-background-size:100%;
-		-moz-background-size:100%;
-		background-size:100%;
+		-webkit-background-size:39px 47px;
+		-moz-background-size:39px 47px;
+		background-size:39px 47px;
 	}
 }

@@ -6,6 +6,7 @@
 var APIKEY = "";
 
 var retina = window.devicePixelRatio >= 2;
+var retina3 = window.devicePixelRatio >= 3;
 
 var pluginDidDisappear = false;
 
@@ -139,7 +140,9 @@ function fillPageWithData ( data )
 	document.getElementById("temp").innerHTML = parseInt(data["current_observation"]["temp_c"]) + "°C";
 	document.getElementById("weather").innerHTML = data["current_observation"]["weather"];
 	var iconName = data["current_observation"]["icon"];
-	if ( retina )
+	if ( retina3 )
+		iconName += "@3x";
+	else if ( retina )
 		iconName += "@2x";
 	document.getElementById("iconImg").src = "./icon_" + iconName + ".png";
 	document.getElementById("iconImg").style.display = "block";
