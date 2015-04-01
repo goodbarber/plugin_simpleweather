@@ -8,7 +8,7 @@
 /************* Debugging Zone *************/
 
 /* Var : int gbDebuggingMode
-*  Sets the debugging mode using a system of code values.
+*  Sets the debugging mode using a system of code values. 
 *  0 : Production mode
 *  1 : Alerts before any request
 *  2 : Alerts before any request + stop requests
@@ -30,7 +30,7 @@ function gbCheckHTML5Mode () {
     try {
         return window.parent && window.self !== window.parent && window.parent.isGbHTML5;
     } catch (e) {
-    	//No access to parent iframe = CORS iframe = not HTML5 (plugin iframes use same domain).
+    	/*No access to parent iframe = CORS iframe = not HTML5 (plugin iframes use same domain).*/
         return false;
     }
 }
@@ -45,7 +45,7 @@ gbHTML5Mode = gbCheckHTML5Mode();
 /* Var : BOOL gbDevMode
 *  JUST TO DEVELOP DIRECTLY ON A DESKTOP BROWSER. If you want to dev and test your plugin in a standard web page, this boolean will do the trick.
 *  Once integrated in a plugin section of an app, this will always be false.
-*  DO NOT USE IN PRODUCTION
+*  DO NOT USE IN PRODUCTION 
 *  true : Development mode
 *  false : Production mode
 */
@@ -67,7 +67,7 @@ function gbParam(name) {
 /* Function : gbIsEmpty
 *  This function tests if an object is empty.
 *  @param obj The action of the form
-*  @return true if the object is empty, false otherwise
+*  @return true if the object is empty, false otherwise 
 */
 function gbIsEmpty ( obj )
 {
@@ -108,17 +108,17 @@ function gbConstructQueryString ( params )
 *  In native engines and devmode, this function creates a form in document.body and send a POST request to "path" using "getParams" and "postParams".
 *  In HTML5 engine, this function delegates its action to the parent window.
 *  @param path The action of the form
-*  @param params The params to send in the request body
+*  @param params The params to send in the request body 
 */
 function gbPostRequest ( path, getParams, postParams )
 {
 
 	var formAction = path;
 	if ( !gbIsEmpty ( getParams ) )
-		formAction += "?" + gbConstructQueryString ( getParams );
+		formAction += "?" + gbConstructQueryString ( getParams ); 
 
 	if(!gbHTML5Mode){
-
+		
 		var form = document.createElement ( "form" );
 		form.setAttribute ( "method", "post" );
 		form.setAttribute ( "action", formAction );
@@ -152,7 +152,7 @@ function gbPostRequest ( path, getParams, postParams )
 *  In native engines, this function launches a navigation to "destination".
 *  In HTML5 engine, this function sends the "destination" to parent window (HTML5 cannot interrupt navigations)
 *  @param path The destination path
-*  @param params (optional) The params to send in the request body
+*  @param params (optional) The params to send in the request body 
 */
 function gbGetRequest ( path, getParams )
 {
@@ -163,7 +163,7 @@ function gbGetRequest ( path, getParams )
 
 	if ( gbDebuggingMode >= 1 )
 		alert ( destination );
-
+	
 	if ( gbDebuggingMode < 2 ){
 		if(!gbHTML5Mode)
 			document.location.replace ( destination );
@@ -193,7 +193,7 @@ function gbXHRequest ( requestMethod, tag, path, postParams )
 *  Launches the mail Composer.
 *  @param to The destination address
 *  @param subject (optional) The mail subject
-*  @param body The (optional) mail content
+*  @param body The (optional) mail content 
 */
 function gbMailto ( to, subject, body )
 {
@@ -205,7 +205,7 @@ function gbMailto ( to, subject, body )
 
 /* Function : gbTel
 *  Launches a call.
-*  @param phoneNumber The number to call
+*  @param phoneNumber The number to call 
 */
 function gbTel ( phoneNumber )
 {
@@ -214,7 +214,7 @@ function gbTel ( phoneNumber )
 
 /* Function : gbSms
 *  Launches the SMS composer.
-*  @param phoneNumber The number to text
+*  @param phoneNumber The number to text 
 */
 function gbSms ( phoneNumber )
 {
@@ -223,7 +223,7 @@ function gbSms ( phoneNumber )
 
 /* Function : gbMaps
 *  Launches the Maps native application.
-*  @param params The parameters to pass in the query string
+*  @param params The parameters to pass in the query string 
 */
 function gbMaps ( params )
 {
@@ -305,7 +305,7 @@ function gbRequest ( resourceUrl, tag, cache, requestMethod, postParams )
 
 	postParams = postParams || {};
 	requestMethod = requestMethod || "GET";
-
+	
 	if ( gbDevMode )
 	{
 		resourceUrl+= (resourceUrl.match(/\?/g) ? '&' : '?') +'gbToken=' + gbToken;
@@ -368,12 +368,12 @@ function gbGetMedia ( mediaType, mediaSource )
 function gbGetLocation ()
 {
 	function success(position)
-	{
+	{  
 		gbDidSuccessGetLocation ( position.coords.latitude,position.coords.longitude );
 	}
 	function fail(error)
 	{
-		switch(error.code)
+		switch(error.code) 
 		{
 			case error.TIMEOUT:
 				gbDidFailGetLocation ('Timeout');
