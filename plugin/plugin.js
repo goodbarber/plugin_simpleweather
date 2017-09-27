@@ -18,7 +18,7 @@ var pluginDidDisappear = false;
 function gbRequestDidSuccess ( tag, data, src )
 {
 	toggleRefresh ();
-	fillPageWithData ( JSON.parse ( decodeURIComponent (data ) ) );
+	fillPageWithData ( JSON.parse ( data ) );
 }
 
 /* Callback : gbRequestDidSuccessWithCache
@@ -27,7 +27,7 @@ function gbRequestDidSuccess ( tag, data, src )
 function gbRequestDidSuccessWithCache ( tag, data, src )
 {
 	toggleRefresh ();
-	fillPageWithData ( JSON.parse ( decodeURIComponent (data ) ) );
+	fillPageWithData ( JSON.parse ( data ) );
 }
 
 /* Callback : gbRequestDidFail
