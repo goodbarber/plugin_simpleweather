@@ -18,7 +18,13 @@ var pluginDidDisappear = false;
 function gbRequestDidSuccess ( tag, data, src )
 {
 	toggleRefresh ();
-	fillPageWithData ( JSON.parse ( data ) );
+	if (gbUserInfo && gbUserInfo.platform == 'ios'){
+	    fillPageWithData ( JSON.parse ( data ) );
+    }
+    else 
+    {
+	    fillPageWithData ( JSON.parse (decodeURIComponent( data )) );
+    }
 }
 
 /* Callback : gbRequestDidSuccessWithCache
@@ -27,7 +33,13 @@ function gbRequestDidSuccess ( tag, data, src )
 function gbRequestDidSuccessWithCache ( tag, data, src )
 {
 	toggleRefresh ();
-	fillPageWithData ( JSON.parse ( data ) );
+	if (gbUserInfo && gbUserInfo.platform == 'ios'){
+	    fillPageWithData ( JSON.parse ( data ) );
+    }
+    else 
+    {
+	    fillPageWithData ( JSON.parse (decodeURIComponent( data )) );
+    }
 }
 
 /* Callback : gbRequestDidFail
