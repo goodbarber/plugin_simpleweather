@@ -22,25 +22,13 @@ gbToken = gbParam('gbToken');
 
 /************* Parent platform detection *************/
 
-/* Function : isHTML5Mode
-*  This function checks if the plugin is loaded inside an HTML5 version, by checking parent iframe info.
-*  @return true if loaded inside HTML5 version
-*/
-function gbCheckHTML5Mode () {
-    try {
-        return window.parent && window.self !== window.parent && window.parent.isGbHTML5;
-    } catch (e) {
-    	/*No access to parent iframe = CORS iframe = not HTML5 (plugin iframes use same domain).*/
-        return false;
-    }
-}
 
-/* Var : BOOL gbHTML5Mode
-*  Switches the URL updates and the form posts to calls to parent iframe - necessary for the plugins to work in the HTML5 version.
-*  true : Development mode
-*  false : Production mode
+gbUserInfo = {};
+
+/* Var : BOOL gbAngularMode
+*  Switches the URL updates and the form posts to messages to parent iframe - necessary for the plugins to work in the website version.
 */
-gbHTML5Mode = gbCheckHTML5Mode();
+gbAngularMode = false;
 
 /* Var : BOOL gbDevMode
 *  JUST TO DEVELOP DIRECTLY ON A DESKTOP BROWSER. If you want to dev and test your plugin in a standard web page, this boolean will do the trick.
@@ -49,7 +37,7 @@ gbHTML5Mode = gbCheckHTML5Mode();
 *  true : Development mode
 *  false : Production mode
 */
-var gbDevMode = !gbHTML5Mode && !navigator.userAgent.match(/iPhone OS/i) && !navigator.userAgent.match(/Android/i);
+var gbDevMode = !gbAngularMode && !navigator.userAgent.match(/iPhone OS/i) && !navigator.userAgent.match(/Android/i);
 
 /************* Helper Functions *************/
 
@@ -106,7 +94,7 @@ function gbConstructQueryString ( params )
 
 /* Function : gbPostRequest
 *  In native engines and devmode, this function creates a form in document.body and send a POST request to "path" using "getParams" and "postParams".
-*  In HTML5 engine, this function delegates its action to the parent window.
+*  In Webapp engine, this function delegates its action to the parent window.
 *  @param path The action of the form
 *  @param params The params to send in the request body 
 */
@@ -117,8 +105,9 @@ function gbPostRequest ( path, getParams, postParams )
 	if ( !gbIsEmpty ( getParams ) )
 		formAction += "?" + gbConstructQueryString ( getParams ); 
 
-	if(!gbHTML5Mode){
-		
+	if (gbAngularMode) {
+		window.parent.postMessage({url: formAction, params: postParams}, '*');
+	} else {
 		var form = document.createElement ( "form" );
 		form.setAttribute ( "method", "post" );
 		form.setAttribute ( "action", formAction );
@@ -137,20 +126,18 @@ function gbPostRequest ( path, getParams, postParams )
 
 		if (gbUserInfo.platform=='android')
 		{
-			Android.post (formAction, postParams);
+			Android.post (formAction, JSON.stringify(postParams));
 		}
 		else
 		{
 			form.submit ();
 		}
-	} else {
-		window.parent.modules.plugin.postRequest( formAction, postParams  );
 	}
 }
 
 /* Function : gbGetRequest
 *  In native engines, this function launches a navigation to "destination".
-*  In HTML5 engine, this function sends the "destination" to parent window (HTML5 cannot interrupt navigations)
+*  In Webapp engine, this function sends the "destination" to parent window with the PostMessage Api
 *  @param path The destination path
 *  @param params (optional) The params to send in the request body 
 */
@@ -164,11 +151,12 @@ function gbGetRequest ( path, getParams )
 	if ( gbDebuggingMode >= 1 )
 		alert ( destination );
 	
-	if ( gbDebuggingMode < 2 ){
-		if(!gbHTML5Mode)
+	if ( gbDebuggingMode < 2 ) {
+		if (gbAngularMode) {
+			window.parent.postMessage({url: destination}, '*');
+		} else {
 			document.location.replace ( destination );
-		else
-			window.parent.modules.plugin.evalPath( destination );
+		}
 	}
 }
 
@@ -201,24 +189,6 @@ function gbMailto ( to, subject, body )
 	subject = subject || "";
 	body = body || "";
 	gbGetRequest ( "mailto:" + to, { "subject":encodeURIComponent(subject), "body":encodeURIComponent(body) } );
-}
-
-/* Function : gbTel
-*  Launches a call.
-*  @param phoneNumber The number to call 
-*/
-function gbTel ( phoneNumber )
-{
-	gbGetRequest ( "tel:" + phoneNumber );
-}
-
-/* Function : gbSms
-*  Launches the SMS composer.
-*  @param phoneNumber The number to text 
-*/
-function gbSms ( phoneNumber )
-{
-	gbGetRequest ( "sms:" + phoneNumber );
 }
 
 /* Function : gbMaps
@@ -432,3 +402,113 @@ function gbGetPreference ( key )
 
 	gbGetRequest ( "goodbarber://getpreference", { "key":key } );
 }
+
+/* Function : gbGetUser
+*  Get the currently connected user. Will call the fail handler gbDidFailGetUser if no user is connected.
+*/
+function gbGetUser ()
+{
+	if ( gbDevMode )
+		gbDidSuccessGetUser ( { id:0, email:"user@example.com", attribs:{ displayName:"Example User" } } );
+
+	gbGetRequest ( "goodbarber://getuser" );
+}
+
+/* Function : gbGetUser
+*  Console log a string. Usefull to log in native iOS with NSLogs
+*/
+function gbLogs( log )
+{
+	if (gbUserInfo && gbUserInfo.platform == 'ios') 
+	{
+		gbAlert('Logs', log);
+	}
+	else 
+	{
+		console.log(log);
+	}
+}
+
+/* Function : gbGetUser
+*  Display an alert
+*/
+function gbAlert( title, message )
+{
+	if (gbUserInfo && gbUserInfo.platform == 'ios') 
+	{
+		gbGetRequest ( "goodbarber://alert?title=" + encodeURIComponent(title) + '&message=' + encodeURIComponent(message));
+	}
+	else 
+	{
+		alert(title + '\n' + message);
+	}
+}
+
+/************* Website *************/
+
+/* Function : gbWebsiteInitPlugin
+ * Initialize the plugin for GB Website
+ */
+function gbWebsiteInitPlugin() {
+	gbAngularMode = true;
+	gbDevMode = false;
+
+	// Intercept clicks on links in order to call the corresponding method
+	var gbCustomLinks = document.getElementsByTagName("a");
+	for(var z = 0; z < gbCustomLinks.length; z++) {
+		var gbCustomLink = gbCustomLinks[z];
+		if (!gbCustomLink.protocol.startsWith('javascript')) {
+			gbCustomLink.onclick = function(e){
+				e.preventDefault();
+				parent.postMessage({url: this.getAttribute("href")}, '*');
+				return false;
+			};
+		}
+	}
+}
+
+/* Function : gbWebsiteSetData
+ * Set a variable with data
+ * @param name The name of the variable
+ * @param value The value of the variable
+ */
+function gbWebsiteSetData(name, value) {
+	window[name] = value;
+}
+
+/* Function : gbWebsiteCallback
+ * Call the callback function asked by the Website if it exists
+ */
+function gbWebsiteCallback(method, args) {
+	var callbackFn = window[method];
+	if (callbackFn) {
+		callbackFn.apply(this, args);
+	}
+}
+
+/*
+ * The postMessage API is used to communicate between the Website and the plugin.
+ * Messages contain data sent by the website containing a method and sometimes parameters.
+ */
+window.addEventListener("message", function(event) {
+	// if (event.origin != window.document.origin) {
+	// 	return;
+	// }
+
+	var method;
+	var params;
+	if (event.data) {
+		method = event.data.method;
+		params = event.data.params;
+	}
+
+	if (method == 'gbWebsiteInitPlugin') {
+		gbWebsiteInitPlugin();
+	} else if (gbAngularMode == true && method == 'gbWebsiteSetData') {
+		gbWebsiteSetData(params[0], params[1]);
+	} else if (gbAngularMode == true) {
+		// The method is a callback
+		gbWebsiteCallback(method, params);
+	}
+
+});
